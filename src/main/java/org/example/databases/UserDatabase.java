@@ -12,6 +12,7 @@ public class UserDatabase {
     private static final String DELETE_SQL = "DELETE FROM users WHERE id = ?";
     private static final String SELECT_USER_BY_USERNAME_SQL = "SELECT * FROM users WHERE username = ?";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD_SQL = "SELECT * FROM users WHERE username = ? AND password = ?";
+    private static final String SELECT_CURRENT_USER_SQL = "SELECT * FROM users WHERE id = ?";
 
 
     public UserDatabase() {
@@ -81,7 +82,7 @@ public class UserDatabase {
 
     public void deleteUser(User user) {
         try (Connection connection = DriverManager.getConnection(URL);
-             PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
+            PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
             statement.setInt(1, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -89,4 +90,19 @@ public class UserDatabase {
         }
     }
 
+    public User getCurrentUser(int userId) {
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement statement = connection.prepareStatement(SELECT_CURRENT_USER_SQL)) {
+            statement.setInt(1, userId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

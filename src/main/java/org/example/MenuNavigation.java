@@ -9,7 +9,19 @@ import java.util.Scanner;
 
 public class MenuNavigation {
 
-    public static void mainMenu(UserDatabase userDatabase) {
+    private ShoppingCart shoppingCart;
+    private UserDatabase userDatabase;
+    private ProductDatabase productDatabase;
+
+
+    public MenuNavigation(ShoppingCart shoppingCart, UserDatabase userDatabase, ProductDatabase productDatabase) {
+        this.shoppingCart = shoppingCart;
+        this.userDatabase = userDatabase;
+        this.productDatabase = productDatabase;
+
+    }
+
+    public void mainMenu(UserDatabase userDatabase) {
         Scanner scanner = new Scanner(System.in);
 
 
@@ -20,14 +32,14 @@ public class MenuNavigation {
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    loginUser(userDatabase, scanner);
+                    loginUser(scanner);
                     break;
                 case 2:
-                    createUser(userDatabase, scanner);
+                    createUser(scanner);
                     break;
                 case 3:
                     System.out.println("Closing program.");
@@ -39,7 +51,7 @@ public class MenuNavigation {
         }
     }
 
-    private static void createUser(UserDatabase userDatabase, Scanner scanner) {
+    private void createUser(Scanner scanner) {
         System.out.println("\nCreate new user\n");
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -51,7 +63,7 @@ public class MenuNavigation {
         System.out.println("User created successfully!");
     }
 
-    private static void loginUser(UserDatabase userDatabase, Scanner scanner) {
+    private void loginUser(Scanner scanner) {
         System.out.println("\nLogin existing user\n");
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -59,12 +71,69 @@ public class MenuNavigation {
         String password = scanner.nextLine();
 
         if (userDatabase.authenticateUser(username, password)) {
-            System.out.println("Login successful!");
+            // Retrieve the current user from the database using the username
+            User currentUser = userDatabase.getUserByUsername(username);
+
+            // Update the shopping cart with the current user
+            shoppingCart.setCurrentUser(currentUser);
+
+            // Call the shopping menu with the updated shopping cart
+            shoppingMenu(scanner);
         } else {
             System.out.println("Invalid username or password.");
         }
     }
 
+    private void shoppingMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("1. Add product to cart");
+            System.out.println("2. View cart");
+            System.out.println("3. Checkout");
+            System.out.println("4. Logout\n");
+            System.out.print("Choose an option: ");
 
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addProductToCart(scanner);
+                    break;
+                case 2:
+                    shoppingCart.viewCart();
+                    break;
+                case 3:
+                    shoppingCart.checkout(new OrderDatabase());
+                    break;
+                case 4:
+                    System.out.println("Logging out.");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private void addProductToCart(Scanner scanner) {
+        System.out.println("\nAdd product to cart\n");
+        System.out.print("Enter product ID: ");
+        int productId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        Product product = productDatabase.getProductById(productId);
+
+        if (product != null) {
+            System.out.print("Enter quantity: ");
+            int quantity = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            shoppingCart.addProduct(product, quantity);
+        } else {
+            System.out.println("Product not found. Please enter a valid product ID.");
+        }
+    }
 }
+
+
+
 

@@ -1,51 +1,57 @@
 package org.example;
 
+
+import org.example.databases.UserDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
+
 public class ShoppingCart {
 
     private List<Product> productsInCart;
     private boolean checkedOut;
+    private User currentUser;
 
-    public ShoppingCart() {
+    public ShoppingCart(User currentUser) {
         this.productsInCart = new ArrayList<>();
         this.checkedOut = false;
+        this.currentUser = currentUser;
     }
 
-    public void addProduct(Product product) {
-        if(!checkedOut) {
-            productsInCart.add(product);
-            System.out.println(product.getName() + " added to cart.");
-        }else{
-            System.out.println("Cannot add product to cart. Cart is already checked out.");
-        }
-    }
-
-    public void viewCart(){
-        if(productsInCart.size() > 0) {
-            System.out.println("Products in cart: ");
-            for (Product product : productsInCart) {
-                System.out.println(product.getName() + " " + product.getPrice());
+    public void addProduct(Product product, int quantity) {
+        if (!checkedOut) {
+            for (int i = 0; i < quantity; i++) {
+                productsInCart.add(product);
             }
-            System.out.println("Total price: " + getTotalPrice());
-        }else{
-            System.out.println("Cart is empty.");
+            System.out.println("Added " + quantity + " " + product.getName() + " to cart.");
+        } else {
+            System.out.println("Cannot add product. Cart is already checked out.");
         }
     }
 
-    public void checkout(){
-        if (!productsInCart.isEmpty() && !checkedOut){
-            System.out.println("Sending order to warehouse...");
+    public void viewCart() {
+        productsInCart.forEach(System.out::println);
 
-            Order order = new Order(productsInCart, getTotalPrice());
-            order.displayOrderDetails();
+    }
+
+    public List<Product> getProductsInCart() {
+        return productsInCart;
+    }
+
+    public void checkout(OrderDatabase orderdatabase) {
+        if (!productsInCart.isEmpty() && !checkedOut) {
+            System.out.println("Sending order to database...");
+
+            double totalPrice = getTotalPrice();
+            orderdatabase.insertOrder(currentUser.getId(), totalPrice);
+
+            // Additional logic or display the order details if needed
 
             checkedOut = true;
             productsInCart.clear();
-        }else{
+        } else {
             System.out.println("Cannot checkout. Cart is empty or already checked out.");
         }
-
     }
 
     private double getTotalPrice() {
@@ -56,4 +62,14 @@ public class ShoppingCart {
         return totalPrice;
     }
 
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "productsInCart=" + productsInCart +
+                '}';
+    }
 }

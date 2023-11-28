@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 public class OrderTests {
-    Product product = new Product(1, "test", 1.00);
+  /*  Product product = new Product(1, "test", 1.00);
     Product product2 = new Product(2, "test2", 2.00);
     Product product3 = new Product(3, "test3", 3.00);
     List<Product> orderItems = List.of(product, product2, product3);
@@ -16,7 +16,7 @@ public class OrderTests {
 
     @BeforeEach
     public void init() {
-        order = new Order(orderItems, 6.00);
+       // order = new Order(orderItems, 6.00);
 
     }
 

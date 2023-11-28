@@ -2,22 +2,21 @@ package org.example;
 
 public class Product {
 
-    private int id;
+    private Integer id;
     private String name;
     private double price;
-    private int quantity;
 
-    public Product(int id, String name, double price) {
+    public Product(Integer id, String name, double price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -37,8 +36,5 @@ public class Product {
         this.price = price;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
 }
