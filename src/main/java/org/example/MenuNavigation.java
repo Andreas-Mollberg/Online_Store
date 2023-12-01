@@ -4,6 +4,7 @@ package org.example;
 import org.example.databases.ProductDatabase;
 import org.example.databases.UserDatabase;
 
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -106,12 +107,20 @@ public class MenuNavigation {
                     shoppingCart.checkout(new OrderDatabase());
                     break;
                 case 4:
+                    viewOrderHistory(shoppingCart.getCurrentUser());
+                case 5:
                     System.out.println("Logging out.");
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
+    }
+
+    private void viewOrderHistory(User currentUser) {
+        System.out.println("\nOrder history\n");
+        OrderDatabase orderDatabase = new OrderDatabase();
+        List<Order> orders = orderDatabase.getOrdersByUserId(currentUser.getId());
     }
 
     private void addProductToCart(Scanner scanner) {

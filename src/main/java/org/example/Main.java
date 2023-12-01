@@ -7,7 +7,7 @@ import org.example.databases.UserDatabase;
 public class Main {
     public static void main(String[] args) {
 
-        runDropTables();
+        //runDropTables();
 
         runTestCode();
     }

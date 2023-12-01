@@ -30,7 +30,10 @@ public class ShoppingCart {
     }
 
     public void viewCart() {
-        productsInCart.forEach(System.out::println);
+        for (Product product : productsInCart) {
+            System.out.println(product.getName() + " - " + product.getPrice());
+        }
+
 
     }
 
@@ -60,6 +63,10 @@ public class ShoppingCart {
             totalPrice += product.getPrice();
         }
         return totalPrice;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     public void setCurrentUser(User currentUser) {
