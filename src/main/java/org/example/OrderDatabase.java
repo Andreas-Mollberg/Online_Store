@@ -56,12 +56,12 @@ public class OrderDatabase {
                 while (resultSet.next()) {
                     int orderId = resultSet.getInt("id");
                     double total = resultSet.getDouble("total");
-                    // You may also retrieve other order details from the result set
 
-                    // Assuming you have a method to retrieve order items from the database
+
+
                     List<Product> orderItems = getOrderItemsByOrderId(orderId);
 
-                    // Create Order object and add to the list
+
                     Order order = new Order(userId, orderItems, total);
                     orders.add(order);
                 }
@@ -75,10 +75,7 @@ public class OrderDatabase {
 
     // Implement a method to retrieve order items based on orderId
     private List<Product> getOrderItemsByOrderId(int orderId) {
-        // You need to implement this method based on your database schema
-        // Retrieve order items associated with the given orderId from the database
-        // Return a list of Product objects
-        // ...
+       
 
         return new ArrayList<>(); // Placeholder, replace with actual implementation
     }

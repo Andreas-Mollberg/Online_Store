@@ -72,13 +72,13 @@ public class MenuNavigation {
         String password = scanner.nextLine();
 
         if (userDatabase.authenticateUser(username, password)) {
-            // Retrieve the current user from the database using the username
+
             User currentUser = userDatabase.getUserByUsername(username);
 
-            // Update the shopping cart with the current user
+
             shoppingCart.setCurrentUser(currentUser);
 
-            // Call the shopping menu with the updated shopping cart
+
             shoppingMenu(scanner);
         } else {
             System.out.println("Invalid username or password.");
@@ -127,14 +127,14 @@ public class MenuNavigation {
         System.out.println("\nAdd product to cart\n");
         System.out.print("Enter product ID: ");
         int productId = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
+        scanner.nextLine();
 
         Product product = productDatabase.getProductById(productId);
 
         if (product != null) {
             System.out.print("Enter quantity: ");
             int quantity = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             shoppingCart.addProduct(product, quantity);
         } else {
